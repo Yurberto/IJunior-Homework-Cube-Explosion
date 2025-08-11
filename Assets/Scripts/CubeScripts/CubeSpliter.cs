@@ -5,12 +5,10 @@ public class CubeSpliter : MonoBehaviour
     [SerializeField, Range(2, 10)] private int _minCopiesValue = 2;
     [SerializeField, Range(3, 20)] private int _maxCopiesValue = 6;
 
-    [SerializeField] private float _splitChance = 1f;
+    private float _splitChance = 1f;
 
     private int _splitChanceDivider = 2;
     private int _scaleDivider = 2;
-
-    public float SplitChance => _splitChance;
 
     private void OnMouseUpAsButton()
     {
@@ -32,15 +30,24 @@ public class CubeSpliter : MonoBehaviour
 
         for (int i = 0; i < copiesCount; i++)
         {
-            GameObject copy = Instantiate(gameObject, transform.position, transform.rotation);
-
-            copy.transform.localScale = transform.localScale / _scaleDivider;
-            copy.GetComponent<CubeSpliter>()._splitChance = _splitChance / _splitChanceDivider;
+            CreateModifiedCopy();
         }
     }
 
     private bool ShouldSplit()
     {
         return _splitChance > Random.value;
+    }
+
+    private void CreateModifiedCopy()
+    {
+        GameObject copy = Instantiate(gameObject, transform.position, transform.rotation);
+
+        copy.transform.localScale = transform.localScale / _scaleDivider;
+
+        if (copy.GetComponent<CubeSpliter>() != null)
+        {
+            copy.GetComponent<CubeSpliter>()._splitChance = _splitChance / _splitChanceDivider;
+        }
     }
 }
