@@ -5,10 +5,8 @@ public class InputHandler : MonoBehaviour
 {
     private const string Horizontal = nameof(Horizontal);
     private const string Vertical = nameof(Vertical);
-    private const string MouseX = "Mouse X";
 
     public event Action<Vector3> InputDirectionChanged;
-    public event Action<float> InputRotationChanged;
 
     private void Update()
     {

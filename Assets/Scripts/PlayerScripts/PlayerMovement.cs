@@ -5,7 +5,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private InputHandler _inputHandler;
     
     [SerializeField] private float _moveSpeed = 5;
-    [SerializeField] private float _sensitivity = 3;
 
     private void OnEnable()
     {

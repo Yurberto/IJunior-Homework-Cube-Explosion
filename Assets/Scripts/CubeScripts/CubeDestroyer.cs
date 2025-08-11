@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ExplodeController : MonoBehaviour
+public class CubeDestroyer : MonoBehaviour
 {
     private void OnMouseUpAsButton()
     {
