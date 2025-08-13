@@ -6,16 +6,16 @@ public class Colorer : MonoBehaviour
 
     private void OnEnable()
     {
-        _spawner.ObjectSpawned += ChangeColor;
+        _spawner.ObjectSpawned += SetRandomColor;
     }
 
     private void OnDisable()
     {
-        _spawner.ObjectSpawned -= ChangeColor;
+        _spawner.ObjectSpawned -= SetRandomColor;
     }
 
-    private void ChangeColor(Splitable objectToChangeColor)
+    private void SetRandomColor(Splitable objectToChangeColor)
     {
-
+        objectToChangeColor.GetComponent<MeshRenderer>().material.color = Random.ColorHSV();
     }
 }
