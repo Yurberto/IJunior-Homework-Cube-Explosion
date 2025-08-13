@@ -7,14 +7,16 @@ public class InputHandler : MonoBehaviour
     private const string Vertical = nameof(Vertical);
 
     public event Action<Vector3> InputDirectionChanged;
+    public event Action MouseLeftClicked;
 
     private void Update()
     {
         Vector3 inputDirection = new Vector3(Input.GetAxisRaw(Horizontal), 0f, Input.GetAxisRaw(Vertical));
         
         if (inputDirection != Vector3.zero)
-        {
             InputDirectionChanged?.Invoke(inputDirection);
-        }
+
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+            MouseLeftClicked?.Invoke();
     }
 }
