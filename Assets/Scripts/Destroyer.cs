@@ -6,10 +6,19 @@ public class Destroyer : MonoBehaviour
 
     private void OnEnable()
     {
+        _raycaster.CubeHitted += DestroyObject;
     }
 
-    private void DestroyObject(GameObject objectToDestroy)
+    private void OnDisable()
     {
-        Destroy(objectToDestroy);
+        _raycaster.CubeHitted -= DestroyObject;
+    }
+
+    private void DestroyObject(RaycastHit objectToDestroy)
+    {
+        if (objectToDestroy.collider != null && objectToDestroy.collider.gameObject != null)
+        {
+            Destroy(objectToDestroy.collider.gameObject);
+        }
     }
 }
