@@ -9,6 +9,7 @@ public class Spawner : MonoBehaviour
     [SerializeField, Range(3, 6)] int _maxSpawnCount = 6;
 
     [SerializeField, Range(0, 1)] float _scaleFactor = 0.5f;
+    [SerializeField, Range(0, 1)] float _splitChanceFactor = 0.5f;
 
     private void Awake()
     {
@@ -22,22 +23,35 @@ public class Spawner : MonoBehaviour
 
     private void OnEnable()
     {
-        _raycaster.CubeHitted += Spawn;
+        _raycaster.CubeHitted += Handle;
     }
 
     private void OnDisable()
     {
-        _raycaster.CubeHitted -= Spawn;
+        _raycaster.CubeHitted -= Handle;
     }
 
-    private void Spawn(RaycastHit hit)
+    private void Handle(RaycastHit hit)
+    {
+        var splitableObject = hit.collider.GetComponent<Splitable>();
+
+        if (splitableObject != null)
+            if (splitableObject.SplitChance >= Random.value)
+                Spawn(splitableObject);
+    }
+
+    private void Spawn(Splitable splitableObject)
     {
         int spawnCount = Random.Range(_minSpawnCount, _maxSpawnCount);
 
         for (int i = 0; i < spawnCount; i++)
         {
-            var newObject = Instantiate(_prefabToSpawn, hit.transform.position, hit.transform.rotation);
-            newObject.transform.localScale = hit.transform.localScale * _scaleFactor;
+            var newObject = Instantiate(_prefabToSpawn, splitableObject.transform.position, splitableObject.transform.rotation);
+
+            float newSplitChance = splitableObject.SplitChance * _splitChanceFactor;
+            Vector3 newScale = splitableObject.transform.localScale * _scaleFactor;
+
+            newObject.Init(newSplitChance, newScale);
         }
     }
 }

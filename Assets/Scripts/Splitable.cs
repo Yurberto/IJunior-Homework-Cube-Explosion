@@ -2,12 +2,16 @@ using UnityEngine;
 
 public class Splitable : MonoBehaviour
 {
-    [SerializeField, Range(0, 1)] private float _splitChance = 1f; 
-
+    private float _splitChance = 1f;
     public float SplitChance => _splitChance;
 
-    public void Init(float splitChance)
+    public void Init(float splitChance, Vector3 scale)
     {
-        _splitChance = splitChance;
+        _splitChance = Mathf.Clamp01(splitChance);
+
+        if (scale.x > 0 && scale.y > 0 && scale.z > 0)
+            transform.localScale = scale;
+
+        Debug.Log(SplitChance.ToString());
     }
 }
