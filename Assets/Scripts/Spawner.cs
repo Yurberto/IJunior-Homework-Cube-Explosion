@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class Spawner : MonoBehaviour
@@ -11,13 +12,16 @@ public class Spawner : MonoBehaviour
     [SerializeField, Range(0, 1)] float _scaleFactor = 0.5f;
     [SerializeField, Range(0, 1)] float _splitChanceFactor = 0.5f;
 
+    public event Action<Splitable> ObjectSpawned;
+
     private void Awake()
     {
         int startSpawnValue = 3;
 
         for (int i = 0; i < startSpawnValue; i++)
         {
-            Instantiate(_prefabToSpawn, transform.position, transform.rotation);
+            var newObject = Instantiate(_prefabToSpawn, transform.position, transform.rotation);
+            newObject.Init(_prefabToSpawn.SplitChance, _prefabToSpawn.transform.localScale);
         }
     }
 
@@ -36,13 +40,13 @@ public class Spawner : MonoBehaviour
         var splitableObject = hit.collider.GetComponent<Splitable>();
 
         if (splitableObject != null)
-            if (splitableObject.SplitChance >= Random.value)
+            if (splitableObject.SplitChance >= UnityEngine.Random.value)
                 Spawn(splitableObject);
     }
 
     private void Spawn(Splitable splitableObject)
     {
-        int spawnCount = Random.Range(_minSpawnCount, _maxSpawnCount);
+        int spawnCount = UnityEngine.Random.Range(_minSpawnCount, _maxSpawnCount);
 
         for (int i = 0; i < spawnCount; i++)
         {
@@ -52,6 +56,8 @@ public class Spawner : MonoBehaviour
             Vector3 newScale = splitableObject.transform.localScale * _scaleFactor;
 
             newObject.Init(newSplitChance, newScale);
+
+            ObjectSpawned?.Invoke(newObject);
         }
     }
 }

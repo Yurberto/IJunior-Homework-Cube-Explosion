@@ -1,5 +1,5 @@
+using System;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class RaycastDetector : MonoBehaviour
 {
@@ -9,7 +9,7 @@ public class RaycastDetector : MonoBehaviour
     private Ray _ray;
     private RaycastHit _hit;
 
-    [SerializeField] public event UnityAction<RaycastHit> CubeHitted;
+    [SerializeField] public event Action<RaycastHit> CubeHitted;
 
     private void OnEnable()
     {
