@@ -14,7 +14,7 @@ public class Colorer : MonoBehaviour
         _spawner.ObjectSpawned -= SetRandomColor;
     }
 
-    private void SetRandomColor(Splitable objectToChangeColor)
+    private void SetRandomColor(Cube objectToChangeColor)
     {
         objectToChangeColor.GetComponent<MeshRenderer>().material.color = Random.ColorHSV();
     }

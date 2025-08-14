@@ -27,7 +27,7 @@ public class RaycastDetector : MonoBehaviour
 
         if (Physics.Raycast(_ray, out _hit))
         {
-            if (_hit.collider.TryGetComponent<Splitable>(out _))
+            if (_hit.collider.TryGetComponent<Cube>(out _))
             {
                 CubeHitted?.Invoke(_hit);
             }

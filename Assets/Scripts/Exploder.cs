@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Exploder : MonoBehaviour
 {
-    [SerializeField] private RaycastDetector _raycastDetector;
+    [SerializeField] private Spawner _spawner;
     [SerializeField, Space(20)] private ParticleSystem _effect;
 
     [SerializeField, Range(0, 100)] private float _explosionRadius = 30f;
@@ -11,35 +11,24 @@ public class Exploder : MonoBehaviour
 
     private void OnEnable()
     {
-        _raycastDetector.CubeHitted += Explode;
+        _spawner.explodableObjectsSpawned += Explode;
     }
 
     private void OnDisable()
     {
-        _raycastDetector.CubeHitted -= Explode;
+        _spawner.explodableObjectsSpawned -= Explode;
     }
 
-    private void Explode(RaycastHit hit)
+    private void Explode(List<Rigidbody> justSpawnedObjects)
     {
-        foreach (Rigidbody explodableObject in GetExplodableObjects())
+        Vector3 effectPosition = justSpawnedObjects[justSpawnedObjects.Count - 1].position;
+
+        foreach (Rigidbody explodableObject in justSpawnedObjects)
         {
-            explodableObject.AddExplosionForce(_explosionForce, hit.transform.position, _explosionRadius);
+            explodableObject.AddExplosionForce(_explosionForce, effectPosition, _explosionRadius);
         }
 
         if (_effect != null)
-            Instantiate(_effect, hit.transform.position, Quaternion.identity);
-    }
-
-    private List<Rigidbody> GetExplodableObjects()
-    {
-        Collider[] hits = Physics.OverlapSphere(transform.position, _explosionRadius);
-
-        List<Rigidbody> objectsToExplode = new();
-
-        foreach (Collider hit in hits)
-            if (hit.attachedRigidbody != null)
-                objectsToExplode.Add(hit.attachedRigidbody);
-
-        return objectsToExplode;
+            Instantiate(_effect, effectPosition, Quaternion.identity);
     }
 }
