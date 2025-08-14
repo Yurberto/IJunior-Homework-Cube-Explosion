@@ -8,13 +8,13 @@ public class Exploder : MonoBehaviour
     [SerializeField, Range(0, 100)] private float _explosionRadius = 30f;
     [SerializeField, Range(0, 5000)] private float _explosionForce = 1000f;
 
-    public void Explode(List<Rigidbody> justSpawnedObjects)
+    public void Explode(List<Cube> justSpawnedObjects)
     {
-        Vector3 explodePosition = justSpawnedObjects[justSpawnedObjects.Count - 1].position;
+        Vector3 explodePosition = justSpawnedObjects[justSpawnedObjects.Count - 1].transform.position;
 
-        foreach (Rigidbody explodableObject in justSpawnedObjects)
+        foreach (Cube explodableObject in justSpawnedObjects)
         {
-            explodableObject.AddExplosionForce(_explosionForce, explodePosition, _explosionRadius);
+            explodableObject.Rigidbody.AddExplosionForce(_explosionForce, explodePosition, _explosionRadius);
         }
 
         if (_effect != null)

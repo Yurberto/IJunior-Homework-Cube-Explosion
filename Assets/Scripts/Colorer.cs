@@ -16,6 +16,11 @@ public class Colorer : MonoBehaviour
 
     private void SetRandomColor(Cube objectToChangeColor)
     {
-        objectToChangeColor.GetComponent<MeshRenderer>().material.color = Random.ColorHSV();
+        var meshRenderer = objectToChangeColor.GetComponent<MeshRenderer>();
+
+        if (meshRenderer == null)
+            return;
+        
+        meshRenderer.material.color = Random.ColorHSV();
     }
 }

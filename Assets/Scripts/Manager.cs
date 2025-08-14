@@ -1,7 +1,6 @@
 using UnityEngine;
-using static UnityEngine.Rendering.VirtualTexturing.Debugging;
 
-public class CubeInteractionManager : MonoBehaviour
+public class Manager : MonoBehaviour
 {
     [SerializeField] private RaycastDetector _raycastDetector;
 

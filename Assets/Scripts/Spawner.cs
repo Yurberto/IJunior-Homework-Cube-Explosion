@@ -25,9 +25,9 @@ public class Spawner : MonoBehaviour
         }
     }
 
-    public List<Rigidbody> Spawn(Cube cube)
+    public List<Cube> Spawn(Cube cube)
     {
-        List<Rigidbody> spawnedObjects = new List<Rigidbody>();
+        List<Cube> spawnedObjects = new();
 
         int spawnCount = UnityEngine.Random.Range(_minSpawnCount, _maxSpawnCount);
 
@@ -39,7 +39,7 @@ public class Spawner : MonoBehaviour
             Vector3 newScale = cube.transform.localScale * _scaleFactor;
 
             newObject.Init(newSplitChance, newScale);
-            spawnedObjects.Add(newObject.GetComponent<Rigidbody>());
+            spawnedObjects.Add(newObject);
 
             ObjectSpawned?.Invoke(newObject);
         }
