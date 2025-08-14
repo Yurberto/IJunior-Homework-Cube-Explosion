@@ -9,7 +9,7 @@ public class RaycastDetector : MonoBehaviour
     private Ray _ray;
     private RaycastHit _hit;
 
-    [SerializeField] public event Action<RaycastHit> CubeHitted;
+    [SerializeField] public event Action<Cube> CubeHitted;
 
     private void OnEnable()
     {
@@ -29,7 +29,7 @@ public class RaycastDetector : MonoBehaviour
         {
             if (_hit.collider.TryGetComponent<Cube>(out _))
             {
-                CubeHitted?.Invoke(_hit);
+                CubeHitted?.Invoke(_hit.collider.GetComponent<Cube>());
             }
         }
     }

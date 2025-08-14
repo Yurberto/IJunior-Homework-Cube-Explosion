@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Spawner : MonoBehaviour
 {
-    [SerializeField] RaycastDetector _raycaster;
     [SerializeField] Cube _prefabToSpawn;
 
     [SerializeField, Range(0, 2)] int _minSpawnCount = 2;
@@ -13,7 +12,6 @@ public class Spawner : MonoBehaviour
     [SerializeField, Range(0, 1)] float _scaleFactor = 0.5f;
     [SerializeField, Range(0, 1)] float _splitChanceFactor = 0.5f;
 
-    public event Action<List<Rigidbody>> explodableObjectsSpawned;
     public event Action<Cube> ObjectSpawned;
 
     private void Awake()
@@ -27,43 +25,25 @@ public class Spawner : MonoBehaviour
         }
     }
 
-    private void OnEnable()
+    public List<Rigidbody> Spawn(Cube cube)
     {
-        _raycaster.CubeHitted += Handle;
-    }
+        List<Rigidbody> spawnedObjects = new List<Rigidbody>();
 
-    private void OnDisable()
-    {
-        _raycaster.CubeHitted -= Handle;
-    }
-
-    private void Handle(RaycastHit hit)
-    {
-        var splitableObject = hit.collider.GetComponent<Cube>();
-
-        if (splitableObject != null)
-            if (splitableObject.SplitChance >= UnityEngine.Random.value)
-                Spawn(splitableObject);
-    }
-
-    private void Spawn(Cube splitableObject)
-    {
-        List<Rigidbody> explodableObjects = new();
         int spawnCount = UnityEngine.Random.Range(_minSpawnCount, _maxSpawnCount);
 
         for (int i = 0; i < spawnCount; i++)
         {
-            var newObject = Instantiate(_prefabToSpawn, splitableObject.transform.position, splitableObject.transform.rotation);
+            var newObject = Instantiate(_prefabToSpawn, cube.transform.position, cube.transform.rotation);
 
-            float newSplitChance = splitableObject.SplitChance * _splitChanceFactor;
-            Vector3 newScale = splitableObject.transform.localScale * _scaleFactor;
+            float newSplitChance = cube.SplitChance * _splitChanceFactor;
+            Vector3 newScale = cube.transform.localScale * _scaleFactor;
 
             newObject.Init(newSplitChance, newScale);
-            explodableObjects.Add(newObject.GetComponent<Rigidbody>());
+            spawnedObjects.Add(newObject.GetComponent<Rigidbody>());
 
             ObjectSpawned?.Invoke(newObject);
         }
 
-        explodableObjectsSpawned?.Invoke(explodableObjects);
+        return spawnedObjects;
     }
 }
