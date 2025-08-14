@@ -10,14 +10,26 @@ public class Exploder : MonoBehaviour
 
     public void Explode(List<Rigidbody> justSpawnedObjects)
     {
-        Vector3 effectPosition = justSpawnedObjects[justSpawnedObjects.Count - 1].position;
+        Vector3 explodePosition = justSpawnedObjects[justSpawnedObjects.Count - 1].position;
 
         foreach (Rigidbody explodableObject in justSpawnedObjects)
         {
-            explodableObject.AddExplosionForce(_explosionForce, effectPosition, _explosionRadius);
+            explodableObject.AddExplosionForce(_explosionForce, explodePosition, _explosionRadius);
         }
 
         if (_effect != null)
-            Instantiate(_effect, effectPosition, Quaternion.identity);
+        {
+            SpawnTimedEffect(explodePosition);
+        }
+    }
+
+    private void SpawnTimedEffect(Vector3 positionToSpawn)
+    {
+        ParticleSystem effectInstance = Instantiate(_effect, positionToSpawn, Quaternion.identity);
+
+        var main = effectInstance.main;
+        float totalDuration = main.duration + main.startLifetime.constantMax;
+
+        Destroy(effectInstance.gameObject, totalDuration);
     }
 }
