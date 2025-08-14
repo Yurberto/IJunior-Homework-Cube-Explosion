@@ -23,9 +23,11 @@ public class Manager : MonoBehaviour
         if (cube == null)
             return;
 
-        if (cube.SplitChance > Random.value)
-            _exploder.Explode(_spawner.Spawn(cube));
-
         _destoyer.DestroyCube(cube);
+
+        if (cube.SplitChance > Random.value)
+            _spawner.Spawn(cube);
+        else
+            _exploder.Explode(cube);
     }
 }

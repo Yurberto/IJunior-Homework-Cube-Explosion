@@ -25,10 +25,8 @@ public class Spawner : MonoBehaviour
         }
     }
 
-    public List<Cube> Spawn(Cube cube)
+    public void Spawn(Cube cube)
     {
-        List<Cube> spawnedObjects = new();
-
         int spawnCount = UnityEngine.Random.Range(_minSpawnCount, _maxSpawnCount);
 
         for (int i = 0; i < spawnCount; i++)
@@ -39,11 +37,8 @@ public class Spawner : MonoBehaviour
             Vector3 newScale = cube.transform.localScale * _scaleFactor;
 
             newObject.Init(newSplitChance, newScale);
-            spawnedObjects.Add(newObject);
 
             ObjectSpawned?.Invoke(newObject);
         }
-
-        return spawnedObjects;
     }
 }
